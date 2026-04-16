@@ -94,15 +94,15 @@
 
     map.once('load', () => {
 
-      // JLL dataset
+      // CW dataset
       map.loadImage(
-        'https://radmap.tiiny.site/JLL.png',
+        'cw.png',
         (error, image) => {
           if (error) return console.error(error);
 
-          map.addImage('JLL', image);
+          map.addImage('cw', image);
 
-          map.addSource('jll_buildings', {
+          map.addSource('cw_buildings', {
             type: 'geojson',
             data: {
               type: 'FeatureCollection',
@@ -128,12 +128,12 @@
           });
 
           map.addLayer({
-            id: 'jll-logo-on-building',
-            source: 'jll_buildings',
+            id: 'cw-logo-on-building',
+            source: 'cw_buildings',
             slot: 'top',
             type: 'symbol',
             layout: {
-              'icon-image': 'JLL',
+              'icon-image': 'cw',
               'icon-allow-overlap': true,
               'icon-size': 0.4,
               'symbol-placement': 'point',
