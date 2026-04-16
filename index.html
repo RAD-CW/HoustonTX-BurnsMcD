@@ -148,6 +148,28 @@
               'text-color': '#8e1000'
             }
           });
+
+          map.addLayer({
+            id: 'BMCD-logo-on-building',
+            source: 'BMCD_buildings',
+            slot: 'top',
+            type: 'symbol',
+            layout: {
+              'icon-image': 'BMCD',
+              'icon-allow-overlap': true,
+              'icon-size': 0.4,
+              'symbol-placement': 'point',
+              'symbol-z-elevate': true,
+              'icon-anchor': 'bottom',
+              'text-field': '{title}',
+              'text-offset': [0, -8.5],
+              'text-size': 12,
+              'text-allow-overlap': true
+            },
+            paint: {
+              'text-color': '#000000'
+            }
+          });
         }
       );
 
