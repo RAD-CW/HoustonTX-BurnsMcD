@@ -96,11 +96,11 @@
 
       // CW dataset
       map.loadImage(
-        'cw.png',
+        'https://raw.githubusercontent.com/RAD-CW/HoustonTX-BurnsMcD/refs/heads/main/CW.png',
         (error, image) => {
           if (error) return console.error(error);
 
-          map.addImage('https://raw.githubusercontent.com/RAD-CW/HoustonTX-BurnsMcD/refs/heads/main/CW.png', image);
+          map.addImage('CW', image);
 
           map.addSource('cw_buildings', {
             type: 'geojson',
