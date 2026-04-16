@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Houston Mapbox 3D Map</title>
+
+  <!-- Mapbox CSS -->
+  <link
+    href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css"
+    rel="stylesheet"
+  />
+
+  <!-- Inline CSS -->
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <!-- Mapbox JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+
+  <!-- Inline JS -->
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoicm9zYW5uYWRpeG9uY3ciLCJhIjoiY2w1OG4wendhMWxkcTNkcG9ya25ubWloOCJ9.oizppmcK1TQQ00x7xzqT9g';
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/light-v11',
+      center: [-95.4619, 29.7389], // Houston, TX (Post Oak Blvd / Galleria)
+      zoom: 13.71,
+      pitch: 75,
+      bearing: 0,
+      antialias: true
+    });
+
+    map.addControl(new mapboxgl.NavigationControl());
+
+    map.on('style.load', () => {
+
+      // Insert the layer beneath any symbol layer
+      const layers = map.getStyle().layers;
+      const labelLayerId = layers.find(
+        (layer) => layer.type === 'symbol' && layer.layout['text-field']
+      ).id;
+
+      // 3D buildings
+      map.addLayer(
+        {
+          id: 'add-3d-buildings',
+          source: 'composite',
+          'source-layer': 'building',
+          filter: ['==', 'extrude', 'true'],
+          type: 'fill-extrusion',
+          minzoom: 5,
+          paint: {
+            'fill-extrusion-color': '#aaa',
+            'fill-extrusion-height': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              5,
+              0,
+              5.05,
+              ['get', 'height']
+            ],
+            'fill-extrusion-base': [
+              'interpolate',
+              ['linear'],
+              ['zoom'],
+              5,
+              0,
+              5.05,
+              ['get', 'min_height']
+            ],
+            'fill-extrusion-opacity': 0.6
+          }
+        },
+        labelLayerId
+      );
+    });
+
+    map.once('load', () => {
+
+      // JLL dataset
+      map.loadImage(
+        'https://radmap.tiiny.site/JLL.png',
+        (error, image) => {
+          if (error) return console.error(error);
+
+          map.addImage('JLL', image);
+
+          map.addSource('jll_buildings', {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [-95.4619, 29.7389] // Houston CW Office
+                  },
+                  properties: { title: 'Cushman Office' }
+                },
+                {
+                  type: 'Feature',
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [-95.4569, 29.7499] // Client Site
+                  },
+                  properties: { title: 'Burns & McDonnell' }
+                }
+              ]
+            }
+          });
+
+          map.addLayer({
+            id: 'jll-logo-on-building',
+            source: 'jll_buildings',
+            slot: 'top',
+            type: 'symbol',
+            layout: {
+              'icon-image': 'JLL',
+              'icon-allow-overlap': true,
+              'icon-size': 0.4,
+              'symbol-placement': 'point',
+              'symbol-z-elevate': true,
+              'icon-anchor': 'bottom',
+              'text-field': '{title}',
+              'text-offset': [0, -8.5],
+              'text-size': 12,
+              'text-allow-overlap': true
+            },
+            paint: {
+              'text-color': '#8e1000'
+            }
+          });
+        }
+      );
+
+    });
+  </script>
+
+</body>
+</html>
