@@ -96,11 +96,11 @@
 
       // CW dataset
       map.loadImage(
-        '../images/CW.png',
+        '/images/CW.png',
         (error, image) => {
           if (error) return console.error(error);
 
-          map.addImage('CW', image);
+          map.addImage('cw', image);
 
           map.addSource('cw_buildings', {
             type: 'geojson',
