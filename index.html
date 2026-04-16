@@ -115,6 +115,24 @@
                   },
                   properties: { title: 'Cushman Office' }
                 },
+                ]
+            }
+          });              
+                
+                 // BMCD dataset
+      map.loadImage(
+        './burnsmcd.png',
+        (error, image) => {
+          if (error) return console.error(error);
+
+          map.addImage('BMCD', image);
+
+          map.addSource('bmcd_buildings', {
+            type: 'geojson',
+            data: {
+              type: 'FeatureCollection',
+              features: [
+                
                 {
                   type: 'Feature',
                   geometry: {
