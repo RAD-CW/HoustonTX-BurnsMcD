@@ -96,11 +96,11 @@
 
       // CW dataset
       map.loadImage(
-        './CW.png',
-        (error, image) => {
-          if (error) return console.error(error);
+      //  './CW.png',
+      //  (error, image) => {
+      //    if (error) return console.error(error);
 
-          map.addImage('cw', image);
+    //      map.addImage('cw', image);
 
           map.addSource('cw_buildings', {
             type: 'geojson',
@@ -119,15 +119,15 @@
             }
           });              
                 
-                 // BMCD dataset
+       // BMCD dataset
       map.loadImage(
-        './burnsmcd.png',
-        (error, image) => {
-          if (error) return console.error(error);
+       // './burnsmcd.png',
+       // (error, image) => {
+        //  if (error) return console.error(error);
 
-          map.addImage('BMCD', image);
+        //  map.addImage('BMCD', image);
 
-          map.addSource('bmcd_buildings', {
+          map.addSource('BMCD_buildings', {
             type: 'geojson',
             data: {
               type: 'FeatureCollection',
