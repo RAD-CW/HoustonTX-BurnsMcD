@@ -100,65 +100,77 @@
 
    
 map.once('load', () => {
-    //JLL dataset
+    // Load both images
     map.loadImage(
-            'https://raw.githubusercontent.com/RAD-CW/HoustonTX-BurnsMcD/refs/heads/main/CW.png',
-            (error, image) => {
-                map.addImage('JLL', image);
-                map.addSource('jll_buildings', {
-                    type: 'geojson',
-                    data: {
-                        type: 'FeatureCollection',
-                        features: [
-                            {
-                                type: 'Feature',
-                                geometry: {
-                                    type: 'Point',
-                                    coordinates: [
-                                        -95.4619, 29.7389 //Houson CW Office
-                                    ]
-                                },
-                              properties:{'title': 'Cushman Office'}
-                            },
-                                                        {
-                                type: 'Feature',
-                                geometry: {
-                                    type: 'Point',
-                                    coordinates: [
-                                        -95.4569, 29.7499 //Client Site
-                                    ]
-                                },
-                              properties:{'title': 'Burns & McDonnell'}
-                            }
-
-                        ]
-                    }
-                });
-                map.addLayer({
-                    id: 'jll-logo-on-building',
-                    source: 'jll_buildings',
-                    slot: 'top',
-                    type: 'symbol',
-                    'layout': {
-                        'icon-image': 'JLL',
-                        'icon-allow-overlap': true,
-                        'icon-size': .4,
-                        'symbol-placement': 'point',
-                        'symbol-z-elevate': true,
-                        'icon-anchor': 'bottom',
-                        'text-field':  '{title}', 
-                      'text-offset': [0, -8.5],
-                      'text-size': 12,
-                      'text-allow-overlap': true
-                    },
-                  'paint': {
-                     'text-color': '#8e1000' // Set the text color
-                     }
-                });
+        'https://raw.githubusercontent.com/RAD-CW/HoustonTX-BurnsMcD/refs/heads/main/CW.png',
+        (error, image) => {
+            if (!error) {
+                map.addImage('CW', image);
             }
-        );
-
-
+            
+            // Load the Burns & McDonnell image
+            map.loadImage(
+                'https://raw.githubusercontent.com/RAD-CW/HoustonTX-BurnsMcD/refs/heads/main/burnsmcd.png',
+                (error, image) => {
+                    if (!error) {
+                        map.addImage('BurnsMcD', image);
+                    }
+                    
+                    // Add source with features that specify which icon to use
+                    map.addSource('jll_buildings', {
+                        type: 'geojson',
+                        data: {
+                            type: 'FeatureCollection',
+                            features: [
+                                {
+                                    type: 'Feature',
+                                    geometry: {
+                                        type: 'Point',
+                                        coordinates: [
+                                            -95.4619, 29.7389 //Houston CW Office
+                                        ]
+                                    },
+                                    properties: { 'title': 'Cushman Office', 'icon': 'CW' }
+                                },
+                                {
+                                    type: 'Feature',
+                                    geometry: {
+                                        type: 'Point',
+                                        coordinates: [
+                                            -95.4569, 29.7499 //Client Site
+                                        ]
+                                    },
+                                    properties: { 'title': 'Burns & McDonnell', 'icon': 'BurnsMcD' }
+                                }
+                            ]
+                        }
+                    });
+                    
+                    map.addLayer({
+                        id: 'jll-logo-on-building',
+                        source: 'jll_buildings',
+                        slot: 'top',
+                        type: 'symbol',
+                        'layout': {
+                            'icon-image': '{icon}',
+                            'icon-allow-overlap': true,
+                            'icon-size': .4,
+                            'symbol-placement': 'point',
+                            'symbol-z-elevate': true,
+                            'icon-anchor': 'bottom',
+                            'text-field':  '{title}', 
+                            'text-offset': [0, -8.5],
+                            'text-size': 12,
+                            'text-allow-overlap': true
+                        },
+                        'paint': {
+                            'text-color': '#8e1000' // Set the text color
+                        }
+                    });
+                }
+            );
+        }
+    );
 });
   </script>
 
